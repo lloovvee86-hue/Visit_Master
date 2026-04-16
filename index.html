@@ -142,7 +142,7 @@
                 researcher: document.getElementById('researcher').value,
                 carNumber: document.getElementById('car-number').value || "없음",
                 meal: document.querySelector('input[name="meal"]:checked').value,
-                timestamp: new Date().toLocaleString('ko-KR')
+                timestamp: new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate()).padStart(2, '0') + ' ' + new Date().toTimeString().split(' ')[0]
             };
 
             try {
