@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>풀무원기술원 - 연구소 전자출입명부</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Pretendard font -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+</head>
+<body>
+
+    <div class="container">
+        <!-- 메인 양식 화면 -->
+        <div id="form-screen" class="card">
+            <div class="header">
+                <h1>Pulmuone</h1>
+                <p>풀무원기술원 (연구소 전자출입명부)</p>
+            </div>
+
+            <p style="font-size: 0.85rem; color: #636e72; margin-bottom: 25px;">
+                안녕하십니까. 풀무원기술원 방문을 환영합니다. 본 연구소는 기술 보호 및 안전 관리를 위해 방문객 출입 기록을 관리하고 있습니다.
+            </p>
+
+            <form id="visit-form">
+                <!-- 1. 개인정보 동의 -->
+                <div class="form-group">
+                    <div class="privacy-box">
+                        <h3>개인정보 수집 및 이용 동의 <span class="required" style="color:red">*</span></h3>
+                        <ul>
+                            <li>• 수집항목: 이름, 연락처, 소속, 차량번호</li>
+                            <li>• 목적: 방문자 확인 및 출입 기록 관리</li>
+                            <li>• 보유기간: 방문일로부터 12개월 보관 후 파기</li>
+                        </ul>
+                    </div>
+                    <label class="checkbox-group">
+                        <input type="checkbox" id="privacy-aggree" required>
+                        <span>위 개인정보 수집 및 이용에 동의합니다.</span>
+                    </label>
+                </div>
+
+                <!-- 2. 성함 및 연락처 -->
+                <div class="form-group">
+                    <label for="name">성함 <span class="required">*</span></label>
+                    <input type="text" id="name" placeholder="예: 홍길동" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">연락처 <span class="required">*</span></label>
+                    <input type="tel" id="contact" placeholder="010-0000-0000" required>
+                </div>
+
+                <!-- 3. 소속 기관명 -->
+                <div class="form-group">
+                    <label for="company">소속 기관명 <span class="required">*</span></label>
+                    <input type="text" id="company" placeholder="회사 또는 기관명을 입력해 주세요" required>
+                </div>
+
+                <!-- 4. 방문 목적 및 담당 연구원 -->
+                <div class="form-group">
+                    <label for="purpose">방문 목적 및 담당 연구원 <span class="required">*</span></label>
+                    <textarea id="purpose" rows="2" placeholder="예: 장비 점검 / 홍길동 연구원" required></textarea>
+                </div>
+
+                <!-- 5. 차량 번호 (선택) -->
+                <div class="form-group">
+                    <label for="car-number">차량 번호 (선택)</label>
+                    <input type="text" id="car-number" placeholder="예: 12가3456">
+                    <small>주차 등록이 필요한 경우에만 입력해 주세요.</small>
+                </div>
+
+                <!-- 6. 식사 여부 -->
+                <div class="form-group">
+                    <label>금일 구내식당 이용 여부 <span class="required">*</span></label>
+                    <div class="choice-group">
+                        <div class="choice-item">
+                            <input type="radio" name="meal" id="meal-y" value="이용함 (O)" required>
+                            <label for="meal-y" class="choice-label">이용함 (O)</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="meal" id="meal-n" value="이용하지 않음 (X)">
+                            <label for="meal-n" class="choice-label">이용하지 않음 (X)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn">방문 등록 완료</button>
+            </form>
+        </div>
+
+        <!-- 제출 완료 화면 -->
+        <div id="success-screen" class="card">
+            <div class="success-icon">✓</div>
+            <h2>등록이 완료되었습니다.</h2>
+            <p>풀무원기술원 방문을 환영합니다.<br>쾌적한 연구 환경을 위해 협조해 주셔서 감사합니다.</p>
+            <button onclick="location.reload()" class="submit-btn" style="background:#636e72; margin-top:30px;">처음으로 돌아가기</button>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('visit-form');
+        const formScreen = document.getElementById('form-screen');
+        const successScreen = document.getElementById('success-screen');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Power Automate HTTP Request URL (이후 대표님께서 생성하신 URL로 교체 필요)
+        const POWER_AUTOMATE_URL = "YOUR_POWER_AUTOMATE_ENDPOINT_HERE";
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = '등록 중...';
+
+            // 데이터 수집
+            const formData = {
+                name: document.getElementById('name').value,
+                contact: document.getElementById('contact').value,
+                company: document.getElementById('company').value,
+                purpose: document.getElementById('purpose').value,
+                carNumber: document.getElementById('car-number').value || "없음",
+                meal: document.querySelector('input[name="meal"]:checked').value,
+                timestamp: new Date().toLocaleString('ko-KR')
+            };
+
+            try {
+                // Power Automate 전송 (주석 처리됨 - 실제 URL 연결 시 활성화)
+                /*
+                const response = await fetch(POWER_AUTOMATE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                */
+
+                // 시뮬레이션: 성공 시 화면 전환
+                console.log("Data Submitted:", formData);
+                setTimeout(() => {
+                    formScreen.style.display = 'none';
+                    successScreen.style.display = 'block';
+                    window.scrollTo(0, 0);
+                }, 1000);
+
+            } catch (error) {
+                alert('등록 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '방문 등록 완료';
+            }
+        });
+    </script>
+</body>
+</html>
