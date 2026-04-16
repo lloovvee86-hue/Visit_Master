@@ -136,6 +136,7 @@
             // 데이터 수집
             const now = new Date();
             const formData = {
+                id: now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0') + String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0') + Math.floor(Math.random() * 1000).toString().padStart(3, '0'),
                 name: document.getElementById('name').value,
                 contact: document.getElementById('contact').value,
                 company: document.getElementById('company').value,
