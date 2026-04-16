@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>풀무원기술원 - 연구소 전자출입명부</title>
     <link rel="stylesheet" href="style.css">
     <!-- Pretendard font -->
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 </head>
+
 <body>
 
     <div class="container">
         <!-- 메인 양식 화면 -->
         <div id="form-screen" class="card">
             <div class="header">
-                <h1>Pulmuone</h1>
+                <img src="pulmuone_logo.png" alt="Pulmuone Logo" class="logo">
                 <p>풀무원기술원 (연구소 전자출입명부)</p>
             </div>
 
@@ -42,11 +45,11 @@
                 <!-- 2. 성함 및 연락처 -->
                 <div class="form-group">
                     <label for="name">성함 <span class="required">*</span></label>
-                    <input type="text" id="name" placeholder="예: 홍길동" required>
+                    <input type="text" id="name" placeholder="예: 김풀무" required>
                 </div>
                 <div class="form-group">
                     <label for="contact">연락처 <span class="required">*</span></label>
-                    <input type="tel" id="contact" placeholder="010-0000-0000" required>
+                    <input type="tel" id="contact" placeholder="010-1234-5678" required>
                 </div>
 
                 <!-- 3. 소속 기관명 -->
@@ -58,13 +61,13 @@
                 <!-- 4. 방문 목적 및 담당 연구원 -->
                 <div class="form-group">
                     <label for="purpose">방문 목적 및 담당 연구원 <span class="required">*</span></label>
-                    <textarea id="purpose" rows="2" placeholder="예: 장비 점검 / 홍길동 연구원" required></textarea>
+                    <textarea id="purpose" rows="2" placeholder="예: 업무 미팅 / 김풀무 연구원" required></textarea>
                 </div>
 
                 <!-- 5. 차량 번호 (선택) -->
                 <div class="form-group">
                     <label for="car-number">차량 번호 (선택)</label>
-                    <input type="text" id="car-number" placeholder="예: 12가3456">
+                    <input type="text" id="car-number" placeholder="예: 123가4567">
                     <small>주차 등록이 필요한 경우에만 입력해 주세요.</small>
                 </div>
 
@@ -92,7 +95,8 @@
             <div class="success-icon">✓</div>
             <h2>등록이 완료되었습니다.</h2>
             <p>풀무원기술원 방문을 환영합니다.<br>쾌적한 연구 환경을 위해 협조해 주셔서 감사합니다.</p>
-            <button onclick="location.reload()" class="submit-btn" style="background:#636e72; margin-top:30px;">처음으로 돌아가기</button>
+            <button onclick="location.reload()" class="submit-btn" style="background:#636e72; margin-top:30px;">처음으로
+                돌아가기</button>
         </div>
     </div>
 
@@ -103,11 +107,23 @@
         const submitBtn = document.getElementById('submit-btn');
 
         // Power Automate HTTP Request URL (이후 대표님께서 생성하신 URL로 교체 필요)
-        const POWER_AUTOMATE_URL = "YOUR_POWER_AUTOMATE_ENDPOINT_HERE";
+        const POWER_AUTOMATE_URL = "https://defaulte22e691ac73b4dd0b7b820d5372811.ae.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/919f14f5b4af45c38e777de5e70c484b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hARlATJa5isI-J62yCTv1zLHQoQqF7x3GqZSHVh8c6o";
+
+        // 연락처 자동 하이픈 기능
+        const contactInput = document.getElementById('contact');
+        contactInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             submitBtn.disabled = true;
             submitBtn.textContent = '등록 중...';
 
@@ -123,24 +139,23 @@
             };
 
             try {
-                // Power Automate 전송 (주석 처리됨 - 실제 URL 연결 시 활성화)
-                /*
+                // Power Automate 전송 (실제 URL 연결 시 활성화됨)
                 const response = await fetch(POWER_AUTOMATE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-                */
 
-                // 시뮬레이션: 성공 시 화면 전환
-                console.log("Data Submitted:", formData);
-                setTimeout(() => {
+                if (response.ok) {
                     formScreen.style.display = 'none';
                     successScreen.style.display = 'block';
                     window.scrollTo(0, 0);
-                }, 1000);
+                } else {
+                    throw new Error('전송 실패');
+                }
 
             } catch (error) {
+
                 alert('등록 중 오류가 발생했습니다. 다시 시도해 주세요.');
                 submitBtn.disabled = false;
                 submitBtn.textContent = '방문 등록 완료';
@@ -148,4 +163,5 @@
         });
     </script>
 </body>
+
 </html>
