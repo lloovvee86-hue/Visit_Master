@@ -58,20 +58,26 @@
                     <input type="text" id="company" placeholder="회사 또는 기관명을 입력해 주세요" required>
                 </div>
 
-                <!-- 4. 방문 목적 및 담당 연구원 -->
+                <!-- 4. 방문 목적 -->
                 <div class="form-group">
-                    <label for="purpose">방문 목적 및 담당 연구원 <span class="required">*</span></label>
-                    <textarea id="purpose" rows="2" placeholder="예: 업무 미팅 / 김풀무 연구원" required></textarea>
+                    <label for="purpose">방문 목적 <span class="required">*</span></label>
+                    <input type="text" id="purpose" placeholder="예: 업무 미팅, 장비 점검 등" required>
                 </div>
 
-                <!-- 5. 차량 번호 (선택) -->
+                <!-- 5. 담당 연구원 -->
+                <div class="form-group">
+                    <label for="researcher">담당 연구원 <span class="required">*</span></label>
+                    <input type="text" id="researcher" placeholder="예: 김풀무 연구원" required>
+                </div>
+
+                <!-- 6. 차량 번호 (선택) -->
                 <div class="form-group">
                     <label for="car-number">차량 번호 (선택)</label>
                     <input type="text" id="car-number" placeholder="예: 123가4567">
                     <small>주차 등록이 필요한 경우에만 입력해 주세요.</small>
                 </div>
 
-                <!-- 6. 식사 여부 -->
+                <!-- 7. 식사 여부 -->
                 <div class="form-group">
                     <label>금일 구내식당 이용 여부 <span class="required">*</span></label>
                     <div class="choice-group">
@@ -133,6 +139,7 @@
                 contact: document.getElementById('contact').value,
                 company: document.getElementById('company').value,
                 purpose: document.getElementById('purpose').value,
+                researcher: document.getElementById('researcher').value,
                 carNumber: document.getElementById('car-number').value || "없음",
                 meal: document.querySelector('input[name="meal"]:checked').value,
                 timestamp: new Date().toLocaleString('ko-KR')
